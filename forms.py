@@ -1,7 +1,13 @@
 from datetime import datetime
+
+from jsonschema import ValidationError
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp
+from enum import Enum
+import re
+
+regex = "\d{11}"
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -83,7 +89,9 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone'
+        'phone',
+        validators=[DataRequired(),
+         Regexp(regex, message="Phone Number should only contain digits")]
     )
     image_link = StringField(
         'image_link'
@@ -193,7 +201,9 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # TODO implement validation logic for state
-        'phone'
+        'phone',
+        validators=[DataRequired(),
+        Regexp(regex, message="Phone Numbers should contain only digits") ]
     )
     image_link = StringField(
         'image_link'
